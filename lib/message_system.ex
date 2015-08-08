@@ -1,0 +1,2 @@
+defmodule MessageSystem do
+end

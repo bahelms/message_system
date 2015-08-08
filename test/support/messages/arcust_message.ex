@@ -1,0 +1,2 @@
+defmodule ArcustMessage do
+end
