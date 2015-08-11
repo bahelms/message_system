@@ -1,8 +1,8 @@
 defmodule MessageSystem do
   use Application
 
-  def start(_type, _args) do
-    {:ok, _} = MessageSystem.Supervisor.start_link
+  def start(_type, [message_client: client]) do
+    MessageSystem.Supervisor.start_link(client)
   end
 end
 

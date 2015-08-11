@@ -13,7 +13,7 @@ defmodule MessageSystem.Mixfile do
   # Type `mix help compile.app` for more information
   def application do
     [applications: [:logger],
-     mod: {MessageSystem, []}]
+     mod: {MessageSystem, [message_client: client(Mix.env)]}]
   end
 
   # Dependencies can be Hex packages:
@@ -26,4 +26,8 @@ defmodule MessageSystem.Mixfile do
   defp deps do
     []
   end
+
+  defp client(:test), do: :test_client
+  defp client(env),   do: :dev_client
 end
+
