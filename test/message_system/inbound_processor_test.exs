@@ -3,6 +3,5 @@ defmodule MessageSystem.InboundProcessorTest do
   alias MessageSystem.InboundProcessor, as: Inbound
 
   test "does stuff" do
-    assert GenServer.call(Inbound, :process) == :test_client
   end
 end
