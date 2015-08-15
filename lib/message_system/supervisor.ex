@@ -1,12 +1,15 @@
 defmodule MessageSystem.Supervisor do
   use Supervisor
 
-  def start_link(processor) do
-    Supervisor.start_link(__MODULE__, processor)
+  def start_link do
+    Supervisor.start_link(__MODULE__, nil)
   end
 
-  def init(inbound_processor) do
-    children = [worker(inbound_processor, [])]
+  def init(_) do
+    children = [
+      worker(MessageQueue, []),
+      worker(MessageSystem.InboundProcessor, []),
+    ]
     supervise(children, strategy: :one_for_one)
   end
 end
