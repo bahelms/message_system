@@ -1,20 +1,22 @@
 defmodule MessageSystem.InboundProcessor do
-  alias MessageQueueInterface, as: Queue
+  use GenServer
+  alias CustomQueueInterface, as: Queue
+
+  ## Client
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def process do
-    Queue.connect(self)
-    _process
+  ## Server
+
+  def init(_) do
+    {:ok, _queue} = Queue.subscribe(self)
   end
 
-  defp _process do
-    receive do
-      {:ok, msg } -> IO.puts "Got msg"
-      _process
-    end
+  def handle_info({:deliver, payload}, queue) do
+    IO.puts payload
+    {:noreply, queue}
   end
 end
 
