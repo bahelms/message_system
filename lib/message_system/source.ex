@@ -7,7 +7,9 @@ defmodule MessageSystem.Source do
   end
 
   defp _file(%{"headers" => headers}) do
-    "#{_file_path}/#{_file_name(headers)}"
+    file = "#{_file_path}/#{_file_name(headers)}"
+    IO.puts file
+    file
   end
 
   defp _file_name(%{"message_source" => source, "record_source" => table}) do
@@ -15,6 +17,6 @@ defmodule MessageSystem.Source do
   end
 
   defp _file_path do
-    "tmp"
+    Application.get_env(Mix.env, :source_file_path)
   end
 end
