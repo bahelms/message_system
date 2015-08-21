@@ -1,13 +1,11 @@
 defmodule MessageSystem.Source do
-  # def update(msg) do
   def update(msg = %{"headers" => headers, "record" => record}) do
     File.open _file(headers), [:append], fn(file) ->
-      IO.write(file, _convert_record(record))
+      IO.write(file, "#{_convert_record(record)}\n")
     end
     msg
   end
 
-  # defp _file(%{"headers" => headers}) do
   defp _file(headers) do
     file = "#{_file_path}/#{_file_name(headers)}"
     IO.puts file
