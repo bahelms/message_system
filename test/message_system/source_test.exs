@@ -12,7 +12,7 @@ defmodule MessageSystem.SourceTest do
   test "update/1 saves the message to a file" do
     update(ArcustMessage.map("1234"))
     {:ok, record} = File.read(@source_file)
-    assert record == "rccst.:1234,rcname:bob"
+    assert record == "rccst.:1234,rcname:bob\n"
   end
 
   test "update/1 returns the message" do
