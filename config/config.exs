@@ -2,8 +2,12 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :test, :source_file_path, "test/tmp"
-config :dev, :source_file_path, "tmp"
+config :message_system, MessageSystem.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "message_system",
+  username: "ms_dev",
+  password: "ms_dev_password",
+  hostname: "localhost"
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

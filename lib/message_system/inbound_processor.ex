@@ -15,18 +15,17 @@ defmodule MessageSystem.InboundProcessor do
   end
 
   def handle_info({:deliver, payload}, queue) do
-    payload |> 
-      :jsx.decode |>
-      MessageSystem.Validator.validate |>
-      # log msg retrieved
-      MessageSystem.Source.update |>
-      IO.inspect
-      # log source update
-      # transform source to public
-      # update public
-      # log public updated
-      # generate responses
-      # send responses
+    msg = payload
+      |> :jsx.decode
+      |> MessageSystem.Validator.validate
+    # log msg retrieved
+    MessageSystem.Source.update(msg)
+      # |> IO.inspect
+    # transform source to public
+    # update public
+    # log public updated
+    # generate responses
+    # send responses
     {:noreply, queue}
   end
 end

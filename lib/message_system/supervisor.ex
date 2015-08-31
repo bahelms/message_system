@@ -8,7 +8,8 @@ defmodule MessageSystem.Supervisor do
   def init(_) do
     children = [
       worker(CustomQueue, []),
-      worker(MessageSystem.InboundProcessor, [])
+      worker(MessageSystem.InboundProcessor, []),
+      worker(MessageSystem.Repo, [])
     ]
     supervise(children, strategy: :one_for_one)
   end

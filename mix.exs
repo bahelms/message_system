@@ -12,7 +12,7 @@ defmodule MessageSystem.Mixfile do
 
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger],
+    [applications: [:logger, :postgrex, :ecto],
      mod: {MessageSystem, []}]
   end
 
@@ -24,7 +24,9 @@ defmodule MessageSystem.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:jsx, "~> 2.7.0"}]
+    [{:jsx, "~> 2.7.0"},
+     {:postgrex, "~> 0.9.1"},
+     {:ecto, "~> 1.0.1"}]
   end
 end
 
