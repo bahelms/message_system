@@ -1,7 +1,7 @@
 defmodule ArcustMessage do
   def map(customer_number \\ Random.number) do
     %{"record" => %{
-        "rccst." => customer_number,
+        "rccst#" => customer_number,
         "rcname" => "bob"}, 
       "headers" => %{
         "message_source" => "POS", 

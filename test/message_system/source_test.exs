@@ -4,31 +4,28 @@ defmodule MessageSystem.SourceTest do
   alias MessageSystem.Source
   alias MessageSystem.Repo
   alias MessageSystem.POS.Arcust
-
-  setup_all do
-    Repo.delete_all(Arcust)
-    :ok
-  end
+  alias MessageSystem.MsgHandler
 
   setup do
+    msg = ArcustMessage.map("1234") |> MsgHandler.sanitize
     on_exit fn -> Repo.delete_all(Arcust) end
-    {:ok, []}
+    {:ok, msg: msg}
   end
 
-  test "apply_change/1 saves the message to the database" do
-    ArcustMessage.map("1234") |> Source.apply_change
+  test "apply_change/1 saves the message to the database", %{msg: msg} do
+    Source.apply_change(msg)
     query = from c in Arcust, where: c."RCCST#" == "1234"
-    assert %Arcust{"RCCST#": "1234"} == Repo.all(query)
+    source = Repo.all(query) |> List.first
+    assert source."RCCST#" == "1234"
   end
 
-  test "apply_change/1 returns the record" do
-    msg = ArcustMessage.map
-    %Arcust{} = Source.apply_change(msg)
+  test "apply_change/1 returns the record", %{msg: msg} do
+    assert %Arcust{} == Source.apply_change(msg)
   end
 
   test "query_source_record/2 either returns one record or []" do
-    source = %Arcust{"RCCST#" => "1234"} |> Repo.insert
-    result = Source.query_source_record("arcust", %{"rccst#" => "1234"})
+    {:ok, source} = %Arcust{"RCCST#": "1234"} |> Repo.insert
+    result = Source.query_source_record("arcust", %{"RCCST#" => "1234"}) |> List.first
     assert result == source
   end
 end
