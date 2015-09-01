@@ -10,10 +10,16 @@ defmodule MessageSystem.POS.Arcust do
   end
 
   @required_fields ~w(RCCST#)
-  @optional_fields []
+  @optional_fields ~w(RCNAME)
 
-  def changeset(customer, params \\ :empty) do
-    customer 
+  @spec changeset(map) :: map
+  def changeset(params \\ :empty) do
+    changeset(%MessageSystem.POS.Arcust{}, params)
+  end
+
+  @spec changeset(map, map) :: map
+  def changeset(arcust, params) do
+    arcust
       |> cast(params, @required_fields, @optional_fields)
       |> unique_constraint(:"RCCST#")
   end

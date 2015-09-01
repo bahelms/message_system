@@ -1,15 +1,12 @@
 defmodule MessageSystem.InboundProcessorTest do
   use ExUnit.Case
   alias MessageSystem.InboundProcessor, as: Inbound
-
-  setup do
-    File.rm("test/tmp/POS_ARCUST.csv")
-    {:ok, []}
-  end
+  alias MessageSystem.POS.Arcust
+  alias MessageSystem.Repo
 
   test "saves the message to source" do
-    payload = ArcustMessage.map("1234") |> :jsx.encode
+    payload = ArcustMessage.map(customer_number: "1234") |> :jsx.encode
     Inbound.handle_info({:deliver, payload}, nil)
-    assert File.read!("test/tmp/POS_ARCUST.csv") == "rccst.:1234,rcname:bob\n"
+    assert Repo.one Arcust.query_by(%{"RCCST#" => "1234"})
   end
 end

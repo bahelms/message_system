@@ -1,12 +1,12 @@
 defmodule ArcustMessage do
-  def map(customer_number \\ Random.number) do
+  def map(options \\ []) do
     %{"record" => %{
-        "rccst#" => customer_number,
-        "rcname" => "bob"}, 
+        "rccst#" => Keyword.get(options, :customer_number, Random.number),
+        "rcname" => "bob"},
       "headers" => %{
-        "message_source" => "POS", 
+        "message_source" => "POS",
         "record_source"  => "ARCUST",
-        "record_mode"    => "INSERT" }}
+        "record_mode"    => Keyword.get(options, :record_mode, "INSERT") }}
   end
 
   def json do

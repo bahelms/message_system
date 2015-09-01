@@ -15,18 +15,27 @@ defmodule MessageSystem.Source do
     model.query_by(params) |> Repo.one
   end
 
+  @spec insert(none, map, map) :: map
   def insert(nil, model, params) do
-    # Repo.insert
+    {:ok, record} = Repo.insert(model.changeset(params))
+    record
   end
 
+  @spec insert(map, map, map) :: map
   def insert(record, model, params), do: update(record, model, params)
 
-  def update(nil, model, params), do: insert(nil, model, params)
+  @spec update(none, map, map) :: map
+  def update(nil, model, params),    do: insert(nil, model, params)
 
+  @spec update(map, map, map) :: map
   def update(record, model, params) do
+    {:ok, record} = Repo.update(model.changeset(record, params))
+    record
   end
 
-  def delete(record, model, params) do
+  @spec delete(map, map, map) :: map
+  def delete(record, _, _) do
+    {:ok, record} = Repo.delete(record)
   end
 
   @spec _source_model(String.t) :: atom

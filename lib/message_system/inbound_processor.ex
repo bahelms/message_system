@@ -20,8 +20,8 @@ defmodule MessageSystem.InboundProcessor do
       |> MessageSystem.MsgHandler.validate
       |> MessageSystem.MsgHandler.sanitize
       # log msg retrieved
-      # |> MessageSystem.Source.apply_change
-      # |> IO.inspect
+      |> IO.inspect
+      |> MessageSystem.Source.apply_change
     # transform source to public
     # update public
     # log public updated
