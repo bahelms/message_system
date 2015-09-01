@@ -8,9 +8,12 @@ defmodule MessageSystem.Customer do
     field :name
   end
 
+  @required_fields ~w(customer_number)
+  @optional_fields []
+
   def changeset(customer, params \\ :empty) do
     customer 
-      |> cast(params, ~w(customer_number), ~w())
-      |> unique_constraint(:customer_number, name: :customers_pkey)
+      |> cast(params, @required_fields, @optional_fields)
+      |> unique_constraint(:customer_number)
   end
 end

@@ -16,10 +16,11 @@ defmodule MessageSystem.InboundProcessor do
 
   def handle_info({:deliver, payload}, queue) do
     msg = payload
-      |> :jsx.decode
-      |> MessageSystem.Validator.validate
-    # log msg retrieved
-    MessageSystem.Source.update(msg)
+      |> MessageSystem.MsgHandler.decode
+      |> MessageSystem.MsgHandler.validate
+      |> MessageSystem.MsgHandler.sanitize
+      # log msg retrieved
+      # |> MessageSystem.Source.apply_change
       # |> IO.inspect
     # transform source to public
     # update public

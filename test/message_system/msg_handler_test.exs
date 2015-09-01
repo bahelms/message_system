@@ -1,6 +1,15 @@
-defmodule MessageSystem.ValidatorTest do
+defmodule MessageSystem.MsgHandlerTest do
   use ExUnit.Case
-  import MessageSystem.Validator
+  import MessageSystem.MsgHandler
+
+  test "decode/1 decodes json into a map" do
+    assert decode("{\"record_source\": \"POS\"}") == %{"record_source" => "POS"}
+  end
+
+  test "sanitize/1 upcases record keys in message" do
+    result = sanitize(%{"record"  => %{"attr1" => "hey", "attr2" => ""}})
+    assert result == %{"record" => %{"ATTR1" => "hey", "ATTR2" => ""}}
+  end
 
   test "validate/1 makes sure the msg is a map with the proper keys" do
     bad_map = %{"no_headers" => "hehe"}
