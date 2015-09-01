@@ -1,5 +1,6 @@
 defmodule MessageSystem.POS.Arcust do
   use Ecto.Model
+  @type t :: map
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
 
@@ -17,8 +18,8 @@ defmodule MessageSystem.POS.Arcust do
       |> unique_constraint(:"RCCST#")
   end
 
-  @spec find_record(map) :: map
-  def find_record(%{"RCCST#" => customer_number}) do
+  @spec query_by(map) :: t
+  def query_by(%{"RCCST#" => customer_number}) do
     from c in __MODULE__, where: c."RCCST#" == ^customer_number
   end
 end

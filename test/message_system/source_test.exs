@@ -1,6 +1,5 @@
 defmodule MessageSystem.SourceTest do
   use ExUnit.Case
-  import Ecto.Query
   alias MessageSystem.Source
   alias MessageSystem.Repo
   alias MessageSystem.POS.Arcust
@@ -12,21 +11,33 @@ defmodule MessageSystem.SourceTest do
     {:ok, msg: msg}
   end
 
-  test "apply_change/1 saves the message to the database", %{msg: msg} do
+  ## apply_change/1
+
+  @doc "when record mode is INSERT or UPDATE"
+  test "performs INSERT when no record is found", %{msg: msg} do
     Source.apply_change(msg)
-    query = from c in Arcust, where: c."RCCST#" == "1234"
-    source = Repo.all(query) |> List.first
+    source = Arcust.query_by(%{"RCCST#" => "1234"}) |> Repo.one
     assert source."RCCST#" == "1234"
   end
 
-  test "apply_change/1 returns the record", %{msg: msg} do
+  @doc "when record mode is INSERT or UPDATE"
+  test "performs UPDATE when record is found", %{msg: msg} do
+    %Arcust{"RCCST#": "1234"} |> Repo.insert
+    Source.apply_change(msg)
+    source = Arcust.query_by(%{"RCCST#" => "1234"}) |> Repo.one
+    assert source."RCNAME" == "bob"
+  end
+
+  test "returns the record", %{msg: msg} do
     assert %Arcust{} == Source.apply_change(msg)
   end
 
-  test "query_source_record/2 either returns one record or []" do
+  ## query_source_record/2
+
+  test "either returns one record or nil" do
     {:ok, source} = %Arcust{"RCCST#": "1234"} |> Repo.insert
-    result = Source.query_source_record("arcust", %{"RCCST#" => "1234"}) |> List.first
-    assert result == source
+    assert Source.query_source_record(Arcust, %{"RCCST#" => "1234"}) == source
+    refute Source.query_source_record(Arcust, %{"RCCST#" => "happy day"})
   end
 end
 

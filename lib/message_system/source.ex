@@ -1,20 +1,32 @@
 defmodule MessageSystem.Source do
-  import Ecto.Query
   alias MessageSystem.Repo
 
   @spec apply_change(map) :: map
   def apply_change(msg = %{"headers" => headers, "record" => params}) do
-    %{"record_mode" => action, "record_source" => table} = headers
-    function = action |> String.downcase |> String.to_atom
-    record = query_source_record(table, params)
-    # apply(__MODULE__, function, [params])
-    # if exists update
-    # if not exists insert
+    %{"record_mode" => mode, "record_source" => table} = headers
+    model = _source_model(table)
+    record = query_source_record(model, params)
+    action = mode |> String.downcase |> String.to_atom
+    apply(__MODULE__, action, [record, model, params])
   end
 
-  @spec query_source_record(String.t, map) :: map | []
-  def query_source_record(table, params) do
-    _source_model(table).find_record(params) |> Repo.all
+  @spec query_source_record(atom, map) :: map | none
+  def query_source_record(model, params) do
+    model.query_by(params) |> Repo.one
+  end
+
+  def insert(nil, model, params) do
+    # Repo.insert
+  end
+
+  def insert(record, model, params), do: update(record, model, params)
+
+  def update(nil, model, params), do: insert(nil, model, params)
+
+  def update(record, model, params) do
+  end
+
+  def delete(record, model, params) do
   end
 
   @spec _source_model(String.t) :: atom

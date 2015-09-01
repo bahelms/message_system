@@ -7,3 +7,5 @@ config :message_system, MessageSystem.Repo,
   password: "ms_test_password",
   hostname: "localhost"
 
+config :logger, :console, level: :info
+
