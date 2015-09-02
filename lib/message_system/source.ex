@@ -1,8 +1,8 @@
 defmodule MessageSystem.Source do
   alias MessageSystem.Repo
 
-  @spec apply_change(map) :: map
-  def apply_change(msg = %{"headers" => headers, "record" => params}) do
+  @spec apply_change(map) :: Struct
+  def apply_change(%{"headers" => headers, "record" => params}) do
     %{"record_mode" => mode, "record_source" => table} = headers
     model = _source_model(table)
     record = query_source_record(model, params)
@@ -35,7 +35,7 @@ defmodule MessageSystem.Source do
 
   @spec delete(map, map, map) :: map
   def delete(record, _, _) do
-    {:ok, record} = Repo.delete(record)
+    {:ok, _record} = Repo.delete(record)
   end
 
   @spec _source_model(String.t) :: atom

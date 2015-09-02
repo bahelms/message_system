@@ -15,18 +15,19 @@ defmodule MessageSystem.InboundProcessor do
   end
 
   def handle_info({:deliver, payload}, queue) do
-    msg = payload
+    payload
       |> MessageSystem.MsgHandler.decode
       |> MessageSystem.MsgHandler.validate
       |> MessageSystem.MsgHandler.sanitize
       # log msg retrieved
-      |> IO.inspect
       |> MessageSystem.Source.apply_change
-    # transform source to public
-    # update public
-    # log public updated
-    # generate responses
-    # send responses
+      # log record saved to source
+      # |> MessageSystem.MsgHandler.transform
+      # |> MessageSystem.Public.apply_change
+      # log public updated
+      # generate responses
+      # send responses
+      # log messages sent
     {:noreply, queue}
   end
 end

@@ -9,8 +9,8 @@ defmodule ArcustMessage do
         "record_mode"    => Keyword.get(options, :record_mode, "INSERT") }}
   end
 
-  def json do
-    :jsx.encode(map)
+  def json(options \\ []) do
+    map(options) |> :jsx.encode
   end
 end
 

@@ -15,12 +15,8 @@ defmodule CustomQueue do
 
   ## Server
 
-  def init([]) do
-    Code.load_file("test/support/messages/arcust_message.ex")
-    msgs = Enum.reduce 1..@message_count, [], fn(_, list) ->
-      [ArcustMessage.json | list]
-    end
-    {:ok, msgs}
+  def init(state) do
+    {:ok, state}
   end
 
   def handle_cast({:deliver, pid}, msgs) do
@@ -28,6 +24,13 @@ defmodule CustomQueue do
       send pid, {:deliver, msg}
     end
     {:noreply, []}
+  end
+
+  defp generate_messages do
+    Code.load_file("test/support/messages/arcust_message.ex")
+    Enum.reduce 1..@message_count, [], fn(_, list) ->
+      [ArcustMessage.json | list]
+    end
   end
 end
 

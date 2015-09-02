@@ -9,11 +9,16 @@ defmodule MessageSystem.Customer do
   end
 
   @required_fields ~w(customer_number)
-  @optional_fields []
+  @optional_fields ~w(name)
 
   def changeset(customer, params \\ :empty) do
-    customer 
+    customer
       |> cast(params, @required_fields, @optional_fields)
       |> unique_constraint(:customer_number)
+  end
+
+  @spec query_by(map) :: map
+  def query_by(%{customer_number: customer_number}) do
+    from c in __MODULE__, where: c.customer_number == ^customer_number
   end
 end
