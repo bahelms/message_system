@@ -10,30 +10,30 @@ defmodule MessageSystem.Source do
     apply(__MODULE__, action, [record, model, params])
   end
 
-  @spec query_source_record(atom, map) :: map | none
+  @spec query_source_record(atom, map) :: Struct | none
   def query_source_record(model, params) do
     model.query_by(params) |> Repo.one
   end
 
-  @spec insert(none, map, map) :: map
+  @spec insert(none, atom, map) :: Struct
   def insert(nil, model, params) do
     {:ok, record} = Repo.insert(model.changeset(params))
     record
   end
 
-  @spec insert(map, map, map) :: map
+  @spec insert(Struct, atom, map) :: Struct
   def insert(record, model, params), do: update(record, model, params)
 
-  @spec update(none, map, map) :: map
+  @spec update(none, atom, map) :: Struct
   def update(nil, model, params),    do: insert(nil, model, params)
 
-  @spec update(map, map, map) :: map
+  @spec update(Struct, atom, map) :: Struct
   def update(record, model, params) do
     {:ok, record} = Repo.update(model.changeset(record, params))
     record
   end
 
-  @spec delete(map, map, map) :: map
+  @spec delete(Struct, atom, map) :: Struct
   def delete(record, _, _) do
     {:ok, _record} = Repo.delete(record)
   end

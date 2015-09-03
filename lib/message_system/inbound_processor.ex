@@ -22,7 +22,7 @@ defmodule MessageSystem.InboundProcessor do
       # log msg retrieved
       |> MessageSystem.Source.apply_change
       # log record saved to source
-      # |> MessageSystem.MsgHandler.transform
+      # |> MessageSystem.MsgHandler.map_to_public
       # |> MessageSystem.Public.apply_change
       # log public updated
       # generate responses
